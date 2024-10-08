@@ -1,1 +1,29 @@
+# Ignorer le dossier target qui contient les artefacts de compilation
 /target
+**/target
+
+# Ignorer les fichiers générés par Cargo
+Cargo.lock
+
+# Ignorer les fichiers de configuration spécifiques à l'éditeur
+/.idea
+/.vscode
+
+# Ignorer les fichiers spécifiques à Rust
+*.rs.bk
+*.bak
+
+# Ignorer les fichiers système spécifiques à macOS
+.DS_Store
+
+# Ignorer les fichiers de logs, temporaires ou autres fichiers inutiles
+*.log
+*.tmp
+
+# Ignorer les fichiers sensibles et d'environnement
+.env
+
+# ignore
+.dockerignore
+.TODO
+.gitignore
