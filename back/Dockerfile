@@ -14,9 +14,8 @@ WORKDIR /usr/src/app
 # Copier les fichiers Cargo.toml et Cargo.lock depuis le répertoire de build (le contexte)
 COPY ./Cargo.toml ./Cargo.lock ./
 
-# Préparer les dépendances (cela permet de ne pas les recompiler si elles ne changent pas)
-RUN cargo build --release
-RUN rm -rf src/
+# Préparer les dépendances
+RUN cargo fetch
 
 # Copier tout le code source de l'application
 COPY . .
@@ -37,6 +36,9 @@ COPY --from=builder /usr/local/cargo/bin/my_rust_app /usr/local/bin/my_rust_app
 
 # Exposer le port sur lequel l'application écoute
 EXPOSE 8080
+
+# Définir les variables d'environnement de l'application (elles seront injectées depuis docker-compose)
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Définir la commande de démarrage
 CMD ["my_rust_app"]
