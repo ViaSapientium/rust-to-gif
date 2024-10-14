@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    login TEXT UNIQUE NOT NULL,
+    username TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL
+);
+
+
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS last_login TIMESTAMP;
+
+SELECT * FROM users WHERE login = $1 OR email = $2;
+
