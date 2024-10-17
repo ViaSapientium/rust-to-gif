@@ -21,7 +21,7 @@ async fn db_check(pool: web::Data<Pool>) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-  dotenv().ok(); // Charge les variables d'environnement à partir de .env
+  dotenv().ok();
 
   // Création du pool de connexion PostgreSQL
   let pool = postgres::config::create_pool();
