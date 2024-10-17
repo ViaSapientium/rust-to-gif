@@ -14,6 +14,6 @@ pub fn create_pool() -> Pool {
     recycling_method: RecyclingMethod::Fast,
   });
 
-  // Ajout du runtime pour le nouvel argument
+  // Ajout du runtime Tokio
   cfg.create_pool(Some(Runtime::Tokio1), NoTls).unwrap()
 }
