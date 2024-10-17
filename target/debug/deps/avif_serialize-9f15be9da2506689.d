@@ -1,0 +1,10 @@
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libavif_serialize-9f15be9da2506689.rmeta: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libavif_serialize-9f15be9da2506689.rlib: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/avif_serialize-9f15be9da2506689.d: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs
+
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs:

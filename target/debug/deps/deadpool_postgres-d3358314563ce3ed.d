@@ -1,0 +1,10 @@
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libdeadpool_postgres-d3358314563ce3ed.rmeta: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/config.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/generic_client.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/../README.md
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libdeadpool_postgres-d3358314563ce3ed.rlib: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/config.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/generic_client.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/../README.md
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/deadpool_postgres-d3358314563ce3ed.d: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/config.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/generic_client.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/../README.md
+
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/lib.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/config.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/generic_client.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/deadpool-postgres-0.14.0/src/../README.md:

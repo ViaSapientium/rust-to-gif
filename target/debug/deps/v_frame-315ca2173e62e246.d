@@ -1,0 +1,11 @@
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libv_frame-315ca2173e62e246.rmeta: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/frame.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/math.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/pixel.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/plane.rs
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/libv_frame-315ca2173e62e246.rlib: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/frame.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/math.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/pixel.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/plane.rs
+
+/home/dev0tion/VscodeProjects/rust-to-gif-back-front/backend/target/debug/deps/v_frame-315ca2173e62e246.d: /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/lib.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/frame.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/math.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/pixel.rs /home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/plane.rs
+
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/lib.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/frame.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/math.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/pixel.rs:
+/home/dev0tion/.cargo/registry/src/index.crates.io-6f17d22bba15001f/v_frame-0.3.8/src/plane.rs:
