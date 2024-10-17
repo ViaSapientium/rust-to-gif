@@ -1,30 +1,41 @@
 version: '3.8'
 
+name: react-rust-postgres
 services:
-  rust-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: rust_gif_app
-    environment:
-      - DATABASE_URL=postgresql://viasapientium:Dragon@1@db:5432/gifdatabase
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
+       backend:
+        build:
+            context: back
+        environment:
+            - ADDRESS=${ADDRESS}
+            - RUST_LOG=${RUST_LOG}
+            - PG_DBNAME=${PG_DBNAME}
+            - PG_HOST=${PG_HOST}
+            - PG_USER=${PG_USER}
+            - PG_PASSWORD=${PG_PASSWORD}
+        networks:
+            - client-side
+            - server-side
+        volumes:
+            - ./back/src:/code/src
+            - backend-cache:/code/target
+        depends_on:
+            - db
+    db:
+        image: postgres:12-alpine
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        networks:
+            - server-side
+        ports:
+            - 5432:5432
+        volumes:
+            - db-data:/var/lib/postgresql/data
 
-
-  db:
-    image: postgres:14
-    container_name: gifdatabase
-    environment:
-      POSTGRES_USER: viasapientium
-      POSTGRES_PASSWORD: Dragon@1
-      POSTGRES_DB: gifdatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+networks:
+    client-side: {}
+    server-side: {}
 
 volumes:
-  pgdata:
+    backend-cache: {}
+    db-data: {}
