@@ -2,9 +2,11 @@ use actix_web::{web, App, HttpServer, Responder};
 use deadpool_postgres::Pool;
 use dotenvy::dotenv;
 use std::env;
+use video::ffmpeg::extract_images;
 
 mod postgres;
 mod user;
+mod video;
 
 // Route simple pour tester le serveur
 async fn index() -> impl Responder {
@@ -19,12 +21,23 @@ async fn db_check(pool: web::Data<Pool>) -> impl Responder {
   }
 }
 
+// Route pour extraire des images depuis une vidéo
+async fn extract_video() -> impl Responder {
+  let video_path = "/src/assets/video.mp4";
+  let output_dir = "/src/video/output";
+
+  match extract_images(video_path, output_dir) {
+    Ok(_) => HttpResponse::Ok().body("Images extracted successfully!"),
+    Err(e) => HttpResponse::In,
+  }
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
   dotenv().ok();
 
   // Création du pool de connexion PostgreSQL
-  let pool = postgres::config::create_pool();
+  let pool = postgres::config::create_pool(); // Cette ligne n'a pas besoin d'un match
 
   let port = env::var("PORT").unwrap_or_else(|_| "8081".to_string());
   HttpServer::new(move || {
