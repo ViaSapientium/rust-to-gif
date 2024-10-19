@@ -1,15 +1,15 @@
 name: react-rust-postgres
 services:
-    frontend:
-        build:
-            context: frontend
-            target: development
-        networks:
-            - client-side
-        ports:
-            - 3000:3000
-        volumes:
-            - ./frontend/src:/code/src:ro
+    #   frontend:
+    #     build:
+    #       context: frontend
+    #       target: development
+    #     networks:
+    #       - client-side
+    #     ports:
+    #       - 3000:3000
+    #     volumes:
+    #       - ./frontend/src:/code/src:ro
 
     backend:
         build:
