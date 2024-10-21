@@ -2,13 +2,14 @@ use argon2::{
   password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
   Argon2,
 };
+use async_trait::async_trait;
 use chrono::{DateTime, Duration as ChronoDuration, Utc};
-use rand::thread_rng;
 use std::error::Error as StdError;
 use tokio_postgres::types::{FromSql, Type};
 use tokio_postgres::Error;
 use tokio_postgres::GenericClient;
 use tokio_postgres::Row;
+use uuid::Uuid;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct User {
@@ -16,6 +17,7 @@ pub struct User {
   pub login: String,
   pub username: String,
   pub email: String,
+  pub password: String,
 }
 
 pub struct PasswordResetToken {
@@ -47,6 +49,7 @@ impl From<Row> for User {
       login: row.get("login"),
       username: row.get("username"),
       email: row.get("email"),
+      password: row.get("password"),
     }
   }
 }
@@ -63,38 +66,61 @@ impl From<Row> for PasswordResetToken {
   }
 }
 
-impl User {
-  pub async fn all<C: GenericClient>(client: &C) -> Result<Vec<User>, Error> {
-    let stmt = client
-      .prepare("SELECT id, login, username, email FROM users")
-      .await?;
-    let rows = client.query(&stmt, &[]).await?;
-    Ok(rows.into_iter().map(User::from).collect())
-  }
-
-  pub async fn find_by_login_or_email<C: GenericClient>(
-    client: &C,
+#[async_trait]
+pub trait UserMethods {
+  async fn find_by_login_or_email(
+    client: &(impl GenericClient + Sync),
     login: &str,
     email: &str,
-  ) -> Result<Option<User>, Error> {
+  ) -> Result<Option<User>, tokio_postgres::Error>;
+
+  async fn add_user(
+    client: &(impl GenericClient + Sync),
+    username: &str,
+    email: &str,
+    password: &str,
+  ) -> Result<(), tokio_postgres::Error>;
+}
+
+#[async_trait]
+impl UserMethods for User {
+  async fn find_by_login_or_email(
+    client: &(impl GenericClient + Sync),
+    login: &str,
+    email: &str,
+  ) -> Result<Option<User>, tokio_postgres::Error> {
     let stmt = client
-      .prepare("SELECT id, login, username, email FROM users WHERE login = $1 OR email = $2")
+      .prepare(
+        "SELECT id, login, username, email, password FROM users WHERE login = $1 OR email = $2",
+      )
       .await?;
     let row = client.query_opt(&stmt, &[&login, &email]).await?;
     Ok(row.map(User::from))
   }
 
-  pub async fn add_user<C: GenericClient>(
-    client: &C,
-    login: &str,
+  async fn add_user(
+    client: &(impl GenericClient + Sync),
     username: &str,
     email: &str,
-  ) -> Result<(), Error> {
+    password: &str,
+  ) -> Result<(), tokio_postgres::Error> {
     let stmt = client
-      .prepare("INSERT INTO users (login, username, email) VALUES ($1, $2, $3)")
+      .prepare("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)")
       .await?;
-    client.execute(&stmt, &[&login, &username, &email]).await?;
+    client
+      .execute(&stmt, &[&username, &email, &password])
+      .await?;
     Ok(())
+  }
+}
+
+impl User {
+  pub async fn all<C: GenericClient>(client: &C) -> Result<Vec<User>, Error> {
+    let stmt = client
+      .prepare("SELECT id, login, username, email, password FROM users")
+      .await?;
+    let rows = client.query(&stmt, &[]).await?;
+    Ok(rows.into_iter().map(User::from).collect())
   }
 
   pub async fn delete_user<C: GenericClient>(client: &C, login: &str) -> Result<(), Error> {
@@ -116,7 +142,7 @@ impl User {
   }
 
   pub fn hash_password(password: &str) -> Result<String, argon2::password_hash::Error> {
-    let salt = SaltString::generate(&mut thread_rng());
+    let salt = SaltString::generate(&mut rand::thread_rng());
     let argon2 = Argon2::default();
     let password_hash = argon2.hash_password(password.as_bytes(), &salt)?;
     Ok(password_hash.to_string())
@@ -135,7 +161,7 @@ impl User {
 
 impl PasswordResetToken {
   pub async fn create_token<C: GenericClient>(client: &C, user_id: i32) -> Result<String, Error> {
-    let token = uuid::Uuid::new_v4().to_string();
+    let token = Uuid::new_v4().to_string();
     let expires_at = (Utc::now() + ChronoDuration::hours(1)).timestamp();
     let stmt = client
       .prepare("INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)")
