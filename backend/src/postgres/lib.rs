@@ -1,10 +1,15 @@
-use deadpool_postgres::Pool;
-use std::error::Error;
+use deadpool_postgres::{Pool, PoolError};
+use std::io;
 
-// Fonction pour tester la connexion au pool PostgresSQL
-pub async fn test_connection(pool: &Pool) -> Result<(), Box<dyn Error>> {
-    let client = pool.get().await?;
-    client.query("SELECT 1", &[]).await?;
-    println!("Connexion PostgresSQL réussie");
-    Ok(())
+pub async fn test_connection(pool: &Pool) -> Result<(), io::Error> {
+  let client = pool
+    .get()
+    .await
+    .map_err(|e: PoolError| io::Error::new(io::ErrorKind::Other, format!("Pool error: {}", e)))?;
+  client
+    .batch_execute("SELECT 1")
+    .await
+    .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Postgres error: {}", e)))?;
+  println!("Connexion PostgresSQL réussie");
+  Ok(())
 }
