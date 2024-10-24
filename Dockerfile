@@ -1,105 +1,42 @@
-# Utiliser l'image Rust comme base
-FROM rust:buster AS base
+# Utiliser la dernière version LTS de l'image Rust
+FROM rust:1.65 as builder
 
-# Définir les variables d'environnement nécessaires pour l'application
-ENV USER=root
-ENV ROCKET_ADDRESS=0.0.0.0
-ENV ROCKET_ENV=development
-
-# Créer un répertoire de travail
-WORKDIR /code
-
-# Définir les variables d'environnement pour libclang et pkg-config
-ENV LIBCLANG_PATH=/usr/lib/llvm-12/lib
-ENV LD_LIBRARY_PATH=/usr/lib/llvm-12/lib
-ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
-
-# Installer les dépendances pour Rust, FFmpeg, et Clang
+# Installer des dépendances pour optimiser les performances
 RUN apt-get update && apt-get install -y \
-  cmake \
-  pkg-config \
-  libssl-dev \
-  ffmpeg \
-  libavfilter-dev \
-  libavformat-dev \
-  libavcodec-dev \
-  libavutil-dev \
-  libavdevice-dev \
-  clang \
-  libclang-dev \
-  llvm-dev \
-  && rm -rf /var/lib/apt/lists/*
+    cmake \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Initialiser le projet Cargo
-RUN cargo init
+# Définir le répertoire de travail
+WORKDIR /usr/src/app
 
-# Copier les fichiers Cargo.toml et Cargo.lock
-COPY ./Cargo.toml ./Cargo.lock ./ 
+# Copier les fichiers Cargo.toml et Cargo.lock depuis le répertoire de build (le contexte)
+COPY ./Cargo.toml ./Cargo.lock ./
 
-# Télécharger les dépendances Cargo
-RUN cargo fetch
+# Préparer les dépendances (cela permet de ne pas les recompiler si elles ne changent pas)
+RUN cargo build --release
+RUN rm -rf src/
 
-# Copier le reste du code source
-COPY . /code
-
-# Phase de développement avec l'exécution du projet en mode offline
-FROM base AS development
-
-# Exposer le port 8000 pour l'application
-EXPOSE 8000
-
-# Commande pour exécuter l'application en mode développement
-CMD [ "cargo", "run" ]
-
-# Phase pour des environnements de développement avancés
-FROM base AS dev-envs
-
-# Exposer le port 8000 pour l'application
-EXPOSE 8000
-
-# Installer git et autres outils de développement si nécessaire
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-
-# Créer un utilisateur vscode avec des droits Docker
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-
-# Copier Docker CLI et d'autres outils de build si nécessaire
-COPY --from=gloursdocker/docker / /
-
-# Commande pour exécuter l'application en mode développement
-CMD [ "cargo", "run" ]
-
-# Phase de construction en release pour la production
-FROM base AS builder
+# Copier tout le code source de l'application
+COPY . .
 
 # Construire l'application en mode release
-RUN cargo build --release
+RUN cargo install --path .
 
-# Phase finale : Utiliser une image plus légère pour exécuter l'application
+# Étape finale : création d'une image plus légère pour exécuter l'application
 FROM debian:buster-slim
 
-# Définir les variables d'environnement pour la production
-ENV ROCKET_ENV=production
-ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
-
-# Installer les dépendances nécessaires pour l'exécution de l'application
+# Installer les dépendances nécessaires à l'exécution
 RUN apt-get update && apt-get install -y \
-  ca-certificates \
-  ffmpeg \
-  && rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copier l'application compilée depuis l'étape de build
-COPY --from=builder /code/target/release/react-rust-postgres /react-rust-postgres
+# Copier l'application compilée depuis l'étape de construction
+COPY --from=builder /usr/local/cargo/bin/my_rust_app /usr/local/bin/my_rust_app
 
-# Exposer le port 8000 pour l'application en production
-EXPOSE 8000
+# Exposer le port sur lequel l'application écoute
+EXPOSE 8080
 
-# Commande pour exécuter l'application en production
-CMD [ "/react-rust-postgres" ]
+# Définir la commande de démarrage
+CMD ["my_rust_app"]
