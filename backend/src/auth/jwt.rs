@@ -1,34 +1,42 @@
+use crate::auth::dto::JwtClaims;
+use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
-use serde::{Deserialize, Serialize};
 use std::env;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct JwtClaims {
-  pub sub: String,
-  pub exp: usize,
-}
-
 pub fn generate_jwt(email: &str) -> String {
+  // Load JWT_SECRET from environment variables
   let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
+
+  // Calculate expiration date (in 24 hours)
+  let expiration = Utc::now()
+    .checked_add_signed(Duration::hours(24))
+    .expect("valid timestamp")
+    .timestamp() as usize;
+
+  // Create JWT claims
   let claims = JwtClaims {
     sub: email.to_owned(),
-    exp: 10000000000,
+    exp: expiration,
   };
+
+  // Generate the JWT token
   encode(
     &Header::default(),
     &claims,
     &EncodingKey::from_secret(secret.as_ref()),
   )
-  .unwrap()
+  .expect("Token encoding failed")
 }
 
 pub fn validate_jwt(token: &str) -> bool {
+  // Load JWT_SECRET from environment variables
   let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
-  let validation = Validation::default();
-  decode::<JwtClaims>(
+
+  // Validate the JWT token
+  let token_data = decode::<JwtClaims>(
     token,
     &DecodingKey::from_secret(secret.as_ref()),
-    &validation,
-  )
-  .is_ok()
+    &Validation::default(),
+  );
+  token_data.is_ok()
 }
