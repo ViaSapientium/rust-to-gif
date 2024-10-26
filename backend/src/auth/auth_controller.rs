@@ -1,28 +1,23 @@
 use crate::auth::auth_service::AuthService;
 use crate::auth::dto::{LoginRequest, RegisterRequest};
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
+use crate::common::responses::ApiResponse;
+use actix_web::{web, Responder};
 use deadpool_postgres::Pool;
 
-pub async fn login(req: web::Json<LoginRequest>, pool: web::Data<Pool>) -> impl Responder {
-  let client = pool.get().await.expect("Failed to get client from pool");
-  let client = &**client; // Access the underlying `tokio_postgres::Client`
+pub async fn register(body: web::Json<RegisterRequest>, pool: web::Data<Pool>) -> impl Responder {
+  let client = pool.get().await.expect("Error connecting with database");
 
-  match AuthService::login(&req.email, &req.password, client).await {
+  match AuthService::register(body.into_inner(), &client).await {
     Ok(response) => response,
-    Err(_) => HttpResponse::Unauthorized().body("Login failed"),
+    Err(err) => ApiResponse::from_error(err),
   }
 }
 
-pub async fn register(
-  req: HttpRequest,
-  body: web::Json<RegisterRequest>,
-  pool: web::Data<Pool>,
-) -> impl Responder {
-  let client = pool.get().await.expect("Failed to get client from pool");
-  let client = &**client; // Access the underlying `tokio_postgres::Client`
+pub async fn login(body: web::Json<LoginRequest>, pool: web::Data<Pool>) -> impl Responder {
+  let client = pool.get().await.expect("Error connecting with database");
 
-  match AuthService::register(req, body.into_inner(), client).await {
+  match AuthService::login(&body.email, &body.password, &client).await {
     Ok(response) => response,
-    Err(_) => HttpResponse::BadRequest().body("Registration failed"),
+    Err(err) => ApiResponse::from_error(err),
   }
 }

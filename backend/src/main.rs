@@ -1,7 +1,8 @@
+use crate::postgres::config::create_pool;
 use actix_web::{web, App, HttpServer, Responder};
-use deadpool_postgres::{Config, Pool, Runtime};
+use deadpool_postgres::Pool;
 use dotenvy::dotenv;
-use std::env;
+
 // use ffmpeg_next::format::context::input::Input;
 // use video::ffmpeg::extract_images;
 
@@ -39,15 +40,7 @@ async fn db_check(pool: web::Data<Pool>) -> impl Responder {
 async fn main() -> std::io::Result<()> {
   dotenv().ok();
 
-  let mut cfg = Config::new();
-  cfg.dbname = Some(env::var("PG_DBNAME").expect("PG_DBNAME must be set"));
-  cfg.user = Some(env::var("PG_USER").expect("PG_USER must be set"));
-  cfg.password = Some(env::var("PG_PASSWORD").expect("PG_PASSWORD must be set"));
-  cfg.host = Some(env::var("PG_HOST").expect("PG_HOST must be set"));
-
-  let pool = cfg
-    .create_pool(Some(Runtime::Tokio1), tokio_postgres::NoTls)
-    .unwrap();
+  let pool = create_pool();
 
   HttpServer::new(move || {
     App::new()
@@ -59,6 +52,16 @@ async fn main() -> std::io::Result<()> {
       .route(
         "/validate",
         web::get().to(auth::auth_service::AuthService::validate_token),
+      )
+      .route("/users", web::get().to(user::user_controller::all_users))
+      .route("/users", web::post().to(user::user_controller::create_user))
+      .route(
+        "/users/{login}",
+        web::delete().to(user::user_controller::delete_user),
+      )
+      .route(
+        "/users/password",
+        web::put().to(user::user_controller::update_password),
       )
   })
   .bind("127.0.0.1:8081")?
