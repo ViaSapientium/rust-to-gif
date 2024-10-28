@@ -14,6 +14,20 @@ impl ApiResponse {
     }))
   }
 
+  // 201 Created
+  pub fn created(message: &str, data: Option<serde_json::Value>) -> HttpResponse {
+    HttpResponse::Created().json(json!({
+        "status": "success",
+        "message": message,
+        "data": data.unwrap_or_else(|| json!(null))
+    }))
+  }
+
+  // 204 No Content
+  pub fn no_content() -> HttpResponse {
+    HttpResponse::NoContent().finish()
+  }
+
   // 400 Bad Request
   pub fn bad_request(message: &str) -> HttpResponse {
     HttpResponse::BadRequest().json(json!({
