@@ -1,5 +1,5 @@
 use crate::auth::auth_service::AuthService;
-use crate::auth::dto::{LoginRequest, RegisterRequest};
+use crate::auth::auth_dto::{LoginRequest, RegisterRequest};
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use deadpool_postgres::Pool;
 
