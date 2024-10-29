@@ -1,7 +1,8 @@
-use crate::auth::dto::RegisterRequest;
-use crate::auth::jwt::{generate_jwt, validate_jwt};
+use crate::auth::auth_dto::RegisterRequest;
+use crate::auth::auth_jwt::{generate_jwt, validate_jwt};
 use crate::common::responses::ApiResponse;
-use crate::user::user::{User, UserMethods};
+use crate::user::user::User;
+use crate::user::user_methods::UserMethods;
 use actix_web::{HttpRequest, HttpResponse};
 use argon2::{
   self,
