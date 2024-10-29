@@ -1,4 +1,5 @@
 pub mod auth_controller;
 pub mod auth_service;
-pub mod dto;
-pub mod jwt;
+pub mod auth_dto;
+pub mod auth_jwt;
+pub mod auth_routes;
