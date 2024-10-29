@@ -1,12 +1,16 @@
+use crate::postgres::lib::test_connection;
 use actix_web::{web, App, HttpServer, Responder};
-use deadpool_postgres::{Config, Pool, Runtime};
+use auth::auth_routes::configure_auth_routes;
+use config::create_pool;
+use deadpool_postgres::Pool;
 use dotenvy::dotenv;
-use std::env;
-// use ffmpeg_next::format::context::input::Input;
+use user::user_routes::configure_user_routes;
 // use video::ffmpeg::extract_images;
+// use ffmpeg_next::format::context::input::Input;
 
 mod auth;
 mod common;
+mod config;
 mod postgres;
 mod user;
 // mod video;
@@ -18,7 +22,7 @@ async fn index() -> impl Responder {
 
 // Route pour tester la connexion à PostgreSQL
 async fn db_check(pool: web::Data<Pool>) -> impl Responder {
-  match postgres::lib::test_connection(&pool).await {
+  match test_connection(&pool).await {
     Ok(_) => "PostgreSQL connection successful!",
     Err(_) => "PostgreSQL connection failed!",
   }
@@ -39,27 +43,16 @@ async fn db_check(pool: web::Data<Pool>) -> impl Responder {
 async fn main() -> std::io::Result<()> {
   dotenv().ok();
 
-  let mut cfg = Config::new();
-  cfg.dbname = Some(env::var("PG_DBNAME").expect("PG_DBNAME must be set"));
-  cfg.user = Some(env::var("PG_USER").expect("PG_USER must be set"));
-  cfg.password = Some(env::var("PG_PASSWORD").expect("PG_PASSWORD must be set"));
-  cfg.host = Some(env::var("PG_HOST").expect("PG_HOST must be set"));
-
-  let pool = cfg
-    .create_pool(Some(Runtime::Tokio1), tokio_postgres::NoTls)
-    .unwrap();
+  let pool = create_pool();
 
   HttpServer::new(move || {
     App::new()
       .app_data(web::Data::new(pool.clone())) // Contexte
       .route("/", web::get().to(index))
-      .route("/db-check", web::get().to(db_check))
-      .route("/login", web::post().to(auth::auth_controller::login))
-      .route("/register", web::post().to(auth::auth_controller::register))
-      .route(
-        "/validate",
-        web::get().to(auth::auth_service::AuthService::validate_token),
-      )
+      .route("/db_check", web::get().to(db_check))
+      .configure(|cfg| configure_auth_routes(cfg))
+      .configure(|cfg| configure_user_routes(cfg))
+    // .route("/extract_video", web::get().to(extract_video))
   })
   .bind("127.0.0.1:8081")?
   .run()
