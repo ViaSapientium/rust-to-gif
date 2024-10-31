@@ -2,7 +2,7 @@ use crate::common::responses::ApiResponse;
 use crate::user::user_dto::{CreateUserRequest, UpdatePasswordRequest};
 use crate::user::user_errors::UserError;
 use crate::user::user_service::UserService;
-use crate::utils::password::generate_password;
+use crate::utils::password_generator::generate_password;
 use actix_web::{web, HttpResponse, Responder};
 use deadpool_postgres::Pool;
 
@@ -26,7 +26,7 @@ pub async fn create_user(
   let client = pool.get().await.expect("Error connecting to database");
 
   let password = if body.password.is_empty() {
-    generate_password(24)
+    generate_password()
   } else {
     body.password.clone()
   };
