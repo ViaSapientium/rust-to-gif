@@ -13,4 +13,19 @@ pub enum UserError {
 
   #[error("Password hashing error")]
   HashingError,
+
+  #[error("Invalid password")]
+  InvalidPassword,
+
+  #[error("Unknown error")]
+  Unknown,
+
+  #[error("Invalid email")]
+  InvalidEmail,
+
+  #[error("Invalid login")]
+  InvalidLogin,
+
+  #[error("Invalid username")]
+  InvalidUsername,
 }
