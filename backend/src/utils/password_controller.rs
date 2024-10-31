@@ -9,5 +9,5 @@ pub async fn generate_password_handler() -> impl Responder {
 
 pub async fn validate_password_handler(password: web::Json<String>) -> impl Responder {
   let is_valid = validate_password(&password);
-  HttpResponse::Ok().json(is_valid)
+  HttpResponse::Ok().json(serde_json::json!({ "is_valid": is_valid }))
 }
