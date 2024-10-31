@@ -22,6 +22,12 @@ pub trait UserRepository {
   async fn delete_user(client: &Client, login: &str) -> Result<(), UserError>;
 
   async fn all(client: &Client) -> Result<Vec<User>, UserError>;
+
+  async fn update_password(
+    client: &Client,
+    email: &str,
+    hashed_password: &str,
+  ) -> Result<(), UserError>;
 }
 
 pub struct UserRepositoryImpl;
@@ -70,5 +76,17 @@ impl UserRepository for UserRepositoryImpl {
       .await?;
     let rows = client.query(&stmt, &[]).await?;
     Ok(rows.into_iter().map(User::from).collect())
+  }
+
+  async fn update_password(
+    client: &Client,
+    email: &str,
+    hashed_password: &str,
+  ) -> Result<(), UserError> {
+    let stmt = client
+      .prepare("UPDATE users SET password = $1 WHERE email = $2")
+      .await?;
+    client.execute(&stmt, &[&hashed_password, &email]).await?;
+    Ok(())
   }
 }
