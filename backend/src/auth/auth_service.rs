@@ -43,15 +43,15 @@ impl AuthService {
   ) -> Result<HttpResponse, AuthServiceError> {
     if let Some(user) = User::find_by_login_or_email(client, email, email).await? {
       if !Self::verify_password(&user.password, password) {
-        return Ok(ApiResponse::unauthorized("Mot de passe incorrect"));
+        return Ok(ApiResponse::unauthorized("Incorrect password"));
       }
       let token = generate_jwt(&user.email);
       return Ok(ApiResponse::success(
-        "Connexion réussie",
+        "Connection successful",
         Some(json!({ "user": user, "token": token })),
       ));
     }
-    Ok(ApiResponse::not_found("Utilisateur non trouvé"))
+    Ok(ApiResponse::not_found("User not found"))
   }
 
   pub async fn register(
@@ -61,13 +61,13 @@ impl AuthService {
   ) -> Result<HttpResponse, AuthServiceError> {
     let email = &body.email;
     if let Some(_) = User::find_by_login_or_email(client, email, email).await? {
-      return Ok(ApiResponse::conflict("L'utilisateur existe déjà"));
+      return Ok(ApiResponse::conflict("User already exists"));
     }
     let hashed_password = Self::hash_password(&body.password)?;
     User::add_user(client, &body.username, email, &hashed_password).await?;
     let token = generate_jwt(email);
     Ok(ApiResponse::success(
-      "Inscription réussie",
+      "Successful registration",
       Some(json!({ "user": body, "token": token })),
     ))
   }
