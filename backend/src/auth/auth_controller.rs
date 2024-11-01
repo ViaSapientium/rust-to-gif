@@ -1,5 +1,5 @@
-use crate::auth::auth_service::AuthService;
 use crate::auth::auth_dto::{LoginRequest, RegisterRequest};
+use crate::auth::auth_service::AuthService;
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use deadpool_postgres::Pool;
 
@@ -19,7 +19,7 @@ pub async fn register(
   pool: web::Data<Pool>,
 ) -> impl Responder {
   let client = pool.get().await.expect("Failed to get client from pool");
-  let client = &**client; // Access the underlying `tokio_postgres::Client`
+  let client = &**client;
 
   match AuthService::register(req, body.into_inner(), client).await {
     Ok(response) => response,
