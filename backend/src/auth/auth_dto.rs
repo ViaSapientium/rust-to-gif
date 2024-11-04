@@ -36,3 +36,18 @@ pub struct AuthResponse {
 pub struct AuthErrorResponse {
   pub error: String,
 }
+
+// DTO for user data
+#[derive(Debug, Serialize, Deserialize)]
+pub struct JwtClaims {
+  pub sub: String,
+  pub exp: usize,
+}
+
+// DTO for API responses
+#[derive(Serialize)]
+struct ApiResponse<T> {
+  success: bool,
+  message: String,
+  data: Option<T>,
+}
