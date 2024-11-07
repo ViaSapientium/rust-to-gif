@@ -1,18 +1,16 @@
+use crate::auth::auth_dto::JwtClaims;
+use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::env;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct JwtClaims {
-  pub sub: String,
-  pub exp: usize,
-}
-
 pub fn generate_jwt(email: &str) -> String {
   let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
+  let expires_in = Duration::days(365);
+
   let claims = JwtClaims {
     sub: email.to_owned(),
-    exp: 10000000000,
+    exp: (Utc::now() + expires_in).timestamp() as usize,
   };
   encode(
     &Header::default(),
