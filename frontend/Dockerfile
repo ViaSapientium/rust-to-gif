@@ -1,36 +1,41 @@
-# syntax=docker/dockerfile:1.4
+# Étape 1 : Image pour le développement
 FROM node:lts AS development
 
-ENV CI=true
-ENV PORT=3000
+# Définir le dossier de travail
+WORKDIR /app
 
-WORKDIR /code
-COPY package.json /code/package.json
-COPY package-lock.json /code/package-lock.json
-RUN npm ci
-COPY . /code
+# Copier les fichiers nécessaires
+COPY package.json package-lock.json ./
 
-CMD [ "npm", "start" ]
+# Installer les dépendances
+RUN npm install
 
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
+# Copier tout le projet
+COPY . .
 
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
+# Exposer le port 5173 pour le serveur de développement
+EXPOSE 5173
 
-FROM development AS builder
+# Lancer le serveur Vite en mode développement
+CMD ["npm", "run", "dev"]
 
+# Étape 2 : Construire pour la production
+FROM node:lts AS builder
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
 RUN npm run build
 
-FROM nginx:1.13-alpine
+# Étape 3 : Image finale avec NGINX pour servir les fichiers statiques
+FROM nginx:stable-alpine
 
-COPY --from=builder /code/build /usr/share/nginx/html
+# Copier les fichiers construits
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Exposer le port pour la prod
+EXPOSE 80
+
+# Lancer NGINX
+CMD ["nginx", "-g", "daemon off;"]
