@@ -4,6 +4,8 @@ FROM rust:1.79 as builder
 # Installer les bibliothèques nécessaires
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
+    libclang-dev \
+    clang \
     libavutil-dev \
     libavcodec-dev \
     libavformat-dev \
