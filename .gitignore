@@ -21,8 +21,7 @@ Cargo.lock
 *.tmp
 
 # Ignorer les fichiers sensibles et d'environnement
-.env.development
-.env.production
+.env
 
 # ignore
 .dockerignore
