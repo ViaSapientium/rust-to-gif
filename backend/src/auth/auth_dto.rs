@@ -7,6 +7,14 @@ pub struct LoginRequest {
   pub password: String,
 }
 
+// DTO for login responses
+#[derive(Serialize)]
+pub struct LoginResponse {
+  pub success: bool,
+  pub token: Option<String>,
+  pub message: Option<String>,
+}
+
 // DTO for registration requests
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RegisterRequest {
@@ -35,4 +43,27 @@ pub struct AuthResponse {
 #[derive(Serialize)]
 pub struct AuthErrorResponse {
   pub error: String,
+}
+
+// DTO for user data
+#[derive(Debug, Serialize, Deserialize)]
+pub struct JwtClaims {
+  pub sub: String,
+  pub exp: usize,
+}
+
+// DTO for API responses
+#[derive(Serialize)]
+struct ApiResponse<T> {
+  success: bool,
+  message: String,
+  data: Option<T>,
+}
+
+// DTO for HTTP responses with detailed error information
+#[derive(Serialize)]
+struct DetailedErrorResponse {
+  code: u16,
+  message: String,
+  details: Option<String>,
 }

@@ -1,9 +1,9 @@
+use crate::auth::auth_controller::{login, register};
 use actix_web::web;
-use crate::auth::auth_service::AuthService;
 
 pub fn configure_auth_routes(cfg: &mut web::ServiceConfig) {
-    cfg.route(
-        "/validate",
-        web::get().to(AuthService::validate_token),
-    );
+  cfg
+    .route("/validate", web::get().to(login))
+    .route("/login", web::post().to(login))
+    .route("/register", web::post().to(register));
 }

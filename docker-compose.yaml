@@ -1,54 +1,55 @@
-version: "3.8"
-
-name: react-rust-postgres
 services:
-  frontend:
+  frontend-dev:
     build:
-      context: frontend
-      target: development
-    networks:
-      - client-side
-    ports:
-      - 3000:3000
-    volumes:
-      - ./frontend/src:/code/src:ro
-
-  backend:
-    build:
-      context: backend
+      context: ./frontend
       target: development
     environment:
-      - ADDRESS=${ADDRESS}
-      - RUST_LOG=${RUST_LOG}
-      - PG_DBNAME=${PG_DBNAME}
-      - PG_HOST=${PG_HOST}
-      - PG_USER=${PG_USER}
-      - PG_PASSWORD=${PG_PASSWORD}
-    networks:
-      - client-side
-      - server-side
+      - VITE_API_URL_DEV=${API_DEV}
+    ports:
+      - "5173:5173"
     volumes:
-      - ./backend/src:/code/src
-      - backend-cache:/code/target
+      - ./frontend:/app
+    networks:
+      - app-network
+
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: builder
+    environment:
+      - DATABASE_URL=postgresql://${PG_USER_DEV}:${PG_PASSWORD_DEV}@db:${PG_PORT_DEV}/${PG_DBNAME}
+      - RUST_LOG_DEV=${RUST_LOG_DEV}
+      - LIBCLANG_PATH=/usr/lib/x86_64-linux-gnu/
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - app-network
     depends_on:
       - db
 
   db:
-    image: postgres:12-alpine
-    restart: always
+    image: postgres:17
+    container_name: postgres_db
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    networks:
-      - server-side
+      - POSTGRES_USER=${PG_USER_DEV}
+      - POSTGRES_PASSWORD=${PG_PASSWORD_DEV}
+      - POSTGRES_DB=${PG_DBNAME}
     ports:
-      - 5432:5432
+      - "${PG_PORT_DEV}:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: always
 
 networks:
-  client-side: {}
-  server-side: {}
+  app-network:
+    driver: bridge
 
 volumes:
-  backend-cache: {}
-  db-data: {}
+  postgres_data:

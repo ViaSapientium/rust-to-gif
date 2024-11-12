@@ -42,6 +42,22 @@
 6. Access the API at `http://localhost:8080`.
 7. You can test the API using tools like **Postman** or **curl**.
 
+### Docker development
+
+Use development environment with docker-compose:
+
+```bash
+docker-compose -f docker-compose.yaml up frontend-dev backend-dev db
+```
+
+### Docker Production
+
+Use production environment with docker-compose:
+
+```bash
+docker-compose -f docker-compose.yaml up frontend-prod backend-prod db
+```
+
 # Commandes utiles postgres
 
 ### Lister les tables de la base de données

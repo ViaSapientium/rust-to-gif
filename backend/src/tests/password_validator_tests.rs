@@ -1,9 +1,7 @@
-use crate::utils::password_generator::generate_password;
-use crate::utils::password_generator::{PASSWORD_LENGTH, SYMBOLS};
-
 #[cfg(test)]
-mod tests {
+mod password_validator_tests {
   use super::*;
+  use crate::utils::password_generator::{generate_password, PASSWORD_LENGTH, SYMBOLS};
 
   #[test]
   fn test_password_length() {

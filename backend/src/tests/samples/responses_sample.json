@@ -1,0 +1,460 @@
+{
+  "success_response": {
+    "success": true,
+    "message": "Operation successful"
+  },
+  "failure_response": {
+    "success": false,
+    "message": "Operation failed"
+  },
+  "validation_error_response": {
+    "success": false,
+    "message": "Validation error",
+    "errors": {
+      "email": ["The email field is required."],
+      "password": ["The password field is required."]
+    }
+  },
+  "unauthorized_response": {
+    "success": false,
+    "message": "Unauthorized"
+  },
+  "forbidden_response": {
+    "success": false,
+    "message": "Forbidden"
+  },
+  "not_found_response": {
+    "success": false,
+    "message": "Resource not found"
+  },
+  "internal_server_error_response": {
+    "success": false,
+    "message": "Internal server error"
+  },
+  "bad_request_response": {
+    "success": false,
+    "message": "Bad request"
+  },
+  "conflict_response": {
+    "success": false,
+    "message": "Resource already exists"
+  },
+  "no_content_response": {
+    "success": true,
+    "message": "No content"
+  },
+  "login_response": {
+    "success": true,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "message": "Login successful"
+  },
+  "register_response": {
+    "success": true,
+    "message": "User registered successfully"
+  },
+  "logout_response": {
+    "success": true,
+    "message": "Logout successful"
+  },
+  "user_not_found_response": {
+    "success": false,
+    "message": "User not found"
+  },
+  "invalid_credentials_response": {
+    "success": false,
+    "message": "Invalid credentials"
+  },
+  "invalid_password_response": {
+    "success": false,
+    "message": "The provided password does not match our records."
+  },
+  "invalid_token_response": {
+    "success": false,
+    "message": "Invalid token"
+  },
+  "expired_token_response": {
+    "success": false,
+    "message": "Expired token"
+  },
+  "invalid_reset_token_response": {
+    "success": false,
+    "message": "Invalid reset token"
+  },
+  "expired_reset_token_response": {
+    "success": false,
+    "message": "Expired reset token"
+  },
+  "password_reset_response": {
+    "success": true,
+    "message": "Password reset successful"
+  },
+  "password_change_response": {
+    "success": true,
+    "message": "Password change successful"
+  },
+  "profile_update_response": {
+    "success": true,
+    "message": "Profile updated successfully"
+  },
+  "profile_delete_response": {
+    "success": true,
+    "message": "Profile deleted successfully"
+  },
+  "user_list_response": {
+    "success": true,
+    "message": "Users retrieved successfully",
+    "users": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "johndoe@email.com",
+        "role": "admin",
+        "created_at": "2021-01-01T00:00:00.000Z",
+        "updated_at": "2021-01-01T00:00:00.000Z",
+        "deleted_at": null,
+        "links": {
+          "self": "http://localhost:3000/api/v1/users/1"
+        }
+      }
+    ]
+  },
+  "user_show_response": {
+    "success": true,
+    "message": "User retrieved successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null
+    }
+  },
+  "user_create_response": {
+    "success": true,
+    "message": "User created successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null,
+      "links": {
+        "self": "http://localhost:3000/api/v1/users/1"
+      }
+    }
+  },
+  "user_update_response": {
+    "success": true,
+    "message": "User updated successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null
+    }
+  },
+  "user_delete_response": {
+    "success": true,
+    "message": "User deleted successfully"
+  },
+  "user_restore_response": {
+    "success": true,
+    "message": "User restored successfully"
+  },
+  "user_soft_delete_response": {
+    "success": true,
+    "message": "User soft deleted successfully"
+  },
+  "user_hard_delete_response": {
+    "success": true,
+    "message": "User hard deleted successfully"
+  },
+  "user_login_response": {
+    "success": true,
+    "message": "User logged in successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null
+    }
+  },
+  "user_register_response": {
+    "success": true,
+    "message": "User registered successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null
+    }
+  },
+  "user_logout_response": {
+    "success": true,
+    "message": "User logged out successfully"
+  },
+  "user_password_reset_response": {
+    "success": true,
+    "message": "User password reset successful"
+  },
+  "user_password_change_response": {
+    "success": true,
+    "message": "User password change successful"
+  },
+  "user_profile_update_response": {
+    "success": true,
+    "message": "User profile updated successfully"
+  },
+  "user_profile_delete_response": {
+    "success": true,
+    "message": "User profile deleted successfully"
+  },
+  "user_profile_restore_response": {
+    "success": true,
+    "message": "User profile restored successfully"
+  },
+  "user_profile_soft_delete_response": {
+    "success": true,
+    "message": "User profile soft deleted successfully"
+  },
+  "user_profile_hard_delete_response": {
+    "success": true,
+    "message": "User profile hard deleted successfully"
+  },
+  "user_profile_list_response": {
+    "success": true,
+    "message": "User profiles retrieved successfully",
+    "users": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "johndoe@email.com",
+        "role": "admin",
+        "created_at": "2021-01-01T00:00:00.000Z",
+        "updated_at": "2021-01-01T00:00:00.000Z",
+        "deleted_at": null,
+        "links": {
+          "self": "http://localhost:3000/api/v1/users/1"
+        }
+      }
+    ]
+  },
+  "user_profile_show_response": {
+    "success": true,
+    "message": "User profile retrieved successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null
+    }
+  },
+  "user_profile_create_response": {
+    "success": true,
+    "message": "User profile created successfully",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@email.com",
+      "role": "admin",
+      "created_at": "2021-01-01T00:00:00.000Z",
+      "updated_at": "2021-01-01T00:00:00.000Z",
+      "deleted_at": null,
+      "links": {
+        "self": "http://localhost:3000/api/v1/users/1"
+      }
+    }
+  },
+  "error_response": {
+    "code": 401,
+    "message": "Invalid credentials",
+    "details": "The provided password does not match our records."
+  },
+  "user_response": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@email.com",
+    "role": "admin",
+    "created_at": "2021-01-01T00:00:00.000Z",
+    "updated_at": "2021-01-01T00:00:00.000Z",
+    "deleted_at": null
+  },
+  "resource_created_response": {
+    "success": true,
+    "message": "Resource created successfully",
+    "data": {
+      "id": 1,
+      "name": "New Resource"
+    }
+  },
+  "resource_updated_response": {
+    "success": true,
+    "message": "Resource updated successfully",
+    "data": {
+      "id": 1,
+      "name": "Updated Resource"
+    }
+  },
+  "resource_deleted_response": {
+    "success": true,
+    "message": "Resource deleted successfully"
+  },
+  "paginated_response": {
+    "success": true,
+    "message": "Paginated results retrieved successfully",
+    "data": {
+      "items": [
+        {
+          "id": 1,
+          "name": "Item 1"
+        },
+        {
+          "id": 2,
+          "name": "Item 2"
+        }
+      ],
+      "total": 50,
+      "page": 1,
+      "page_size": 10
+    }
+  },
+  "resource_list_response": {
+    "success": true,
+    "message": "Resources retrieved successfully",
+    "resources": [
+      {
+        "id": 1,
+        "name": "Resource 1",
+        "created_at": "2021-01-01T00:00:00.000Z",
+        "updated_at": "2021-01-01T00:00:00.000Z",
+        "deleted_at": null,
+        "links": {
+          "self": "http://localhost:3000/api/v1/resources/1"
+        }
+      }
+    ]
+  },
+  "detailed_validation_error_response": {
+    "success": false,
+    "message": "Validation error",
+    "errors": {
+      "username": ["The username must be unique."],
+      "password": ["The password must be at least 8 characters."]
+    }
+  },
+  "session_expired_response": {
+    "success": false,
+    "message": "Session expired, please log in again"
+  },
+  "service_maintenance_response": {
+    "success": false,
+    "message": "The service is currently under maintenance. Please try again later."
+  },
+  "redirect_response": {
+    "success": true,
+    "message": "Redirecting to another endpoint",
+    "redirect_url": "http://localhost:3000/new-endpoint"
+  },
+  "request_timeout_response": {
+    "success": false,
+    "message": "The request took too long to complete. Please try again later."
+  },
+  "rate_limit_exceeded_response": {
+    "success": false,
+    "message": "Rate limit exceeded. Please wait before making more requests."
+  },
+  "email_already_in_use_response": {
+    "success": false,
+    "message": "The email is already in use. Please choose a different one."
+  },
+  "username_already_in_use_response": {
+    "success": false,
+    "message": "The username is already in use. Please choose a different one."
+  },
+  "resource_not_found_response": {
+    "success": false,
+    "message": "Resource not found"
+  },
+  "resource_already_exists_response": {
+    "success": false,
+    "message": "Resource already exists"
+  },
+  "resource_not_created_response": {
+    "success": false,
+    "message": "Resource not created"
+  },
+  "resource_not_updated_response": {
+    "success": false,
+    "message": "Resource not updated"
+  },
+  "resource_not_deleted_response": {
+    "success": false,
+    "message": "Resource not deleted"
+  },
+  "resource_not_restored_response": {
+    "success": false,
+    "message": "Resource not restored"
+  },
+  "resource_not_soft_deleted_response": {
+    "success": false,
+    "message": "Resource not soft deleted"
+  },
+  "file_upload_success_response": {
+    "success": true,
+    "message": "File uploaded successfully",
+    "file_url": "http://localhost:3000/uploads/myfile.png"
+  },
+  "file_download_success_response": {
+    "success": true,
+    "message": "File download successful",
+    "file_data": "<base64_encoded_data>"
+  },
+  "file_delete_success_response": {
+    "success": true,
+    "message": "File deleted successfully"
+  },
+  "file_not_found_response": {
+    "success": false,
+    "message": "File not found"
+  },
+  "file_not_uploaded_response": {
+    "success": false,
+    "message": "File not uploaded"
+  },
+  "file_not_downloaded_response": {
+    "success": false,
+    "message": "File not downloaded"
+  },
+  "file_not_deleted_response": {
+    "success": false,
+    "message": "File not deleted"
+  },
+  "file_not_restored_response": {
+    "success": false,
+    "message": "File not restored"
+  },
+  "file_not_soft_deleted_response": {
+    "success": false,
+    "message": "File not soft deleted"
+  },
+  "file_not_hard_deleted_response": {
+    "success": false,
+    "message": "File not hard deleted"
+  }
+}
