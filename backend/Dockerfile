@@ -1,50 +1,59 @@
-# Étape 1 : Construire le binaire Rust
+# Step 1: Build the Rust binary
 FROM rust:1.79 as builder
 
-# Installer les bibliothèques nécessaires
+# Install necessary libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev \
-    libclang-dev \
-    clang \
-    libavutil-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libavdevice-dev \
-    libavfilter-dev \
-    pkg-config
+  libpq-dev \
+  libclang-dev \
+  clang \
+  llvm \
+  llvm-dev \
+  llvm-runtime \
+  libavutil-dev \
+  libavcodec-dev \
+  libavformat-dev \
+  libavdevice-dev \
+  libavfilter-dev \
+  pkg-config
 
-# Configurer PKG_CONFIG_PATH pour FFmpeg
+# Configure PKG_CONFIG_PATH for FFmpeg
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig
 
-# Définir le dossier de travail
+# Set LIBCLANG_PATH for bindgen
+ENV LIBCLANG_PATH=/usr/lib/x86_64-linux-gnu/
+
+# Debug: Find and print all libclang files
+RUN find /usr -name "libclang.so*"
+
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copier Cargo.toml et Cargo.lock
+# Copy Cargo.toml and Cargo.lock
 COPY Cargo.toml Cargo.lock ./
 
-# Télécharger les dépendances
+# Fetch dependencies
 RUN cargo fetch
 
-# Copier les fichiers sources
+# Copy source files
 COPY . .
 
-# Compiler le projet
+# Build the project
 RUN cargo build --release
 
-# Étape 2 : Image légère pour exécuter le backend
+# Step 2: Lightweight image to run the backend
 FROM debian:buster-slim
 
-# Installer les bibliothèques nécessaires
+# Install necessary libraries
 RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev
 
-# Configurer le dossier de travail
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copier le binaire depuis l'étape de build
+# Copy the binary from the build stage
 COPY --from=builder /usr/src/app/target/release/rust_to_gif_backend .
 
-# Exposer le port
+# Expose the port
 EXPOSE 8000
 
-# Démarrer le serveur
+# Start the server
 CMD ["./rust_to_gif_backend"]
