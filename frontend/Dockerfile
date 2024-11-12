@@ -1,25 +1,25 @@
-# Étape 1 : Image pour le développement
+# Step 1: Image for development
 FROM node:lts AS development
 
-# Définir le dossier de travail
+# Set the working directory
 WORKDIR /app
 
-# Copier les fichiers nécessaires
+# Copy necessary files
 COPY package.json package-lock.json ./
 
-# Installer les dépendances
+# Install dependencies
 RUN npm install
 
-# Copier tout le projet
+# Copy the entire project
 COPY . .
 
-# Exposer le port 5173 pour le serveur de développement
+# Expose port 5173 for the development server
 EXPOSE 5173
 
-# Lancer le serveur Vite en mode développement
+# Start the Vite server in development mode
 CMD ["npm", "run", "dev"]
 
-# Étape 2 : Construire pour la production
+# Step 2: Build for production
 FROM node:lts AS builder
 
 WORKDIR /app
@@ -28,14 +28,14 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Étape 3 : Image finale avec NGINX pour servir les fichiers statiques
+# Step 3: Final image with NGINX to serve static files
 FROM nginx:stable-alpine
 
-# Copier les fichiers construits
+# Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Exposer le port pour la prod
+# Expose port for production
 EXPOSE 80
 
-# Lancer NGINX
+# Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
