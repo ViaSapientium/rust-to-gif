@@ -1,4 +1,5 @@
 use crate::postgres::lib::test_connection;
+use crate::protected::configure_protected_routes;
 use actix_web::{web, App, HttpServer, Responder};
 use auth::auth_routes::configure_auth_routes;
 use config::create_pool;
@@ -13,6 +14,8 @@ mod auth;
 mod common;
 mod config;
 mod postgres;
+mod protected;
+mod tests;
 mod user;
 mod utils;
 // mod video;
@@ -49,12 +52,13 @@ async fn main() -> std::io::Result<()> {
 
   HttpServer::new(move || {
     App::new()
-      .app_data(web::Data::new(pool.clone())) // Contexte
+      .app_data(web::Data::new(pool.clone()))
       .route("/", web::get().to(index))
       .route("/db_check", web::get().to(db_check))
       .configure(|cfg| configure_auth_routes(cfg))
       .configure(|cfg| configure_user_routes(cfg))
       .configure(|cfg| configure_password_routes(cfg))
+      .configure(|cfg| configure_protected_routes(cfg))
     // .route("/extract_video", web::get().to(extract_video))
   })
   .bind("127.0.0.1:8081")?

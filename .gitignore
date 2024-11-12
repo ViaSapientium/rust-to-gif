@@ -1,13 +1,13 @@
 # Ignorer le dossier target qui contient les artefacts de compilation
-/target
+target
 **/target
 
 # Ignorer les fichiers générés par Cargo
 Cargo.lock
 
 # Ignorer les fichiers de configuration spécifiques à l'éditeur
-/.idea
-/.vscode
+.idea
+.vscode
 
 # Ignorer les fichiers spécifiques à Rust
 *.rs.bk
@@ -26,18 +26,17 @@ Cargo.lock
 # ignore
 .dockerignore
 .TODO
-.gitignore
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # production
-/build
+build
 
 # misc
 .DS_Store

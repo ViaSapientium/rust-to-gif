@@ -1,15 +1,19 @@
+use crate::common::errors::UserServiceError;
 use crate::user::user::User;
-use crate::user::user_errors::UserError;
-use crate::user::user_repository::{UserRepository, UserRepositoryImpl};
-use crate::utils::password_generator::generate_password;
-use crate::utils::password_validator::validate_password;
+use crate::user::user::UserMethods;
 use argon2::{
-  self, password_hash::SaltString, Argon2, PasswordHash, PasswordHasher, PasswordVerifier,
+  password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
+  Argon2,
 };
 use deadpool_postgres::Client;
-use rand::rngs::OsRng;
 
 pub struct UserService;
+
+impl From<argon2::password_hash::Error> for UserServiceError {
+  fn from(err: argon2::password_hash::Error) -> Self {
+    UserServiceError::HashingError(err.to_string())
+  }
+}
 
 impl UserService {
   pub async fn add_user(
@@ -17,61 +21,47 @@ impl UserService {
     username: &str,
     login: &str,
     email: &str,
-    password: Option<&str>,
-  ) -> Result<(), UserError> {
-    let password = password
-      .map(|p| p.to_string())
-      .unwrap_or_else(generate_password);
-
-    if !validate_password(&password) {
-      return Err(UserError::InvalidPassword);
-    }
-
-    let hashed_password = Self::hash_password(&password)?;
-    UserRepositoryImpl::add_user(client, username, login, email, &hashed_password).await
-  }
-
-  pub async fn find_by_login_or_email(
-    client: &Client,
-    login: &str,
-    email: &str,
-  ) -> Result<Option<User>, UserError> {
-    UserRepositoryImpl::find_by_login_or_email(client, login, email).await
-  }
-
-  pub async fn delete_user(client: &Client, login: &str) -> Result<(), UserError> {
-    UserRepositoryImpl::delete_user(client, login).await
-  }
-
-  pub async fn all_users(client: &Client) -> Result<Vec<User>, UserError> {
-    UserRepositoryImpl::all(client).await
+    password: &str,
+  ) -> Result<(), UserServiceError> {
+    let hashed_password = Self::hash_password(password)?;
+    User::add_user(client, username, login, email, &hashed_password).await?;
+    Ok(())
   }
 
   pub async fn update_password(
     client: &Client,
     email: &str,
     new_password: &str,
-  ) -> Result<(), UserError> {
-    let hashed_password = Self::hash_password(&new_password)?;
-    UserRepositoryImpl::update_password(client, email, &hashed_password).await
+  ) -> Result<(), UserServiceError> {
+    let hashed_password = Self::hash_password(new_password)?;
+    User::update_password(client, email, &hashed_password).await?;
+    Ok(())
   }
 
-  pub fn verify_password(hash: &str, password: &str) -> Result<bool, UserError> {
-    let parsed_hash = PasswordHash::new(hash).map_err(|_| UserError::HashingError)?;
+  pub async fn delete_user(client: &Client, login: &str) -> Result<(), UserServiceError> {
+    User::delete_user(client, login).await?;
+    Ok(())
+  }
+
+  pub async fn all_users(client: &Client) -> Result<Vec<User>, UserServiceError> {
+    let users = User::all(client).await?;
+    Ok(users)
+  }
+
+  fn hash_password(password: &str) -> Result<String, UserServiceError> {
+    let salt = SaltString::generate(&mut rand::thread_rng());
+    let argon2 = Argon2::default();
+    let password_hash = argon2.hash_password(password.as_bytes(), &salt)?;
+    Ok(password_hash.to_string())
+  }
+
+  pub fn verify_password(hash: &str, password: &str) -> Result<bool, UserServiceError> {
+    let parsed_hash = PasswordHash::new(hash)?;
     let argon2 = Argon2::default();
     Ok(
       argon2
         .verify_password(password.as_bytes(), &parsed_hash)
         .is_ok(),
     )
-  }
-
-  fn hash_password(password: &str) -> Result<String, UserError> {
-    let salt = SaltString::generate(&mut OsRng);
-    let argon2 = Argon2::default();
-    let password_hash = argon2
-      .hash_password(password.as_bytes(), &salt)
-      .map_err(|_| UserError::HashingError)?;
-    Ok(password_hash.to_string())
   }
 }
