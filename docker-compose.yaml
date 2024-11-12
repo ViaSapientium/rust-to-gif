@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   frontend-dev:
     build:
@@ -22,35 +20,13 @@ services:
     environment:
       - DATABASE_URL=postgresql://${PG_USER_DEV}:${PG_PASSWORD_DEV}@db:${PG_PORT_DEV}/${PG_DBNAME}
       - RUST_LOG_DEV=${RUST_LOG_DEV}
+      - LIBCLANG_PATH=/usr/lib/x86_64-linux-gnu/
     env_file:
       - .env
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    networks:
-      - app-network
-    depends_on:
-      - db
-
-  frontend-prod:
-    image: rust_to_gif_frontend:latest
-    environment:
-      - VITE_API_URL_PROD=${API_PROD}
-    ports:
-      - "3000:80"
-    networks:
-      - app-network
-
-  backend-prod:
-    image: rust_to_gif_backend:latest
-    environment:
-      - DATABASE_URL=postgresql://${PG_USER_PROD}:${PG_PASSWORD_PROD}@db:${PG_PORT_PROD}/${PG_DBNAME}
-      - RUST_LOG_PROD=${RUST_LOG_PROD}
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
     networks:
       - app-network
     depends_on:
